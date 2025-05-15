@@ -1,29 +1,36 @@
 name: Push to Replicate
-
 on:
   push:
     branches: [ main ]  # Or your default branch name
   workflow_dispatch:    # Allows manual triggering
-
-
 jobs:
   push_to_replicate:
     name: Push to Replicate
     runs-on: ubuntu-latest
     steps:
-      - name: Free disk pace
+      - name: Free disk space
         uses: jlumbroso/free-disk-space@v1.3.1
         with:
           tool-cache: false
           docker-images: false
-
+      
       - name: Checkout
         uses: actions/checkout@v4
-
+      
+      # Setup Python explicitly (before Cog)
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'  # Use Python 3.10 as specified in cog.yaml
+      
+      # Remove any .python-version file which might be forcing a specific version
+      - name: Remove Python version file
+        run: rm -f .python-version || true
+      
       - name: Setup Cog
         uses: replicate/setup-cog@v2
         with:
           token: ${{ secrets.REPLICATE_API_TOKEN }}
-
+      
       - name: Push to Replicate
         run: cog push r8.im/${{ secrets.REPLICATE_MODEL_NAME }}
