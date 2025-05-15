@@ -1,0 +1,18 @@
+build:
+  gpu: true
+  python_version: "3.10"
+  python_packages:
+    - torch==2.0.1
+    - torchvision
+    - numpy
+    - pillow
+    - opencv-python
+    - onnxruntime-gpu
+    - insightface==0.7.3
+    - opennsfw2
+    - tqdm
+    - gfpgan
+    - realesrgan
+  system_packages:
+    - ffmpeg
+predict: "predict.py:Predictor"
